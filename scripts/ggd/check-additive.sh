@@ -14,10 +14,14 @@ set -euo pipefail
 UPSTREAM_REF="${1:-upstream/next}"
 
 # ── Allowlist ────────────────────────────────────────────────────────────────
-# Deux familles d'exceptions, et seulement deux :
+# Trois familles d'exceptions, et rien d'autre :
 #   1. Rebranding (décision §7 du guide) — identité du paquet/plugin.
 #   2. Artefacts GÉNÉRÉS — régénérés par `npm run build` quand on ajoute la
 #      capability gamedev ; un conflit s'y résout en régénérant, jamais à la main.
+#   3. Registres de parité exigés par le process upstream LUI-MÊME pour tout
+#      agent/commande ajouté : ligne d'inventaire (gen-inventory-manifest) et
+#      entrée d'aide (test bug-2954, parité bidirectionnelle help ↔ commands).
+#      Conflit de merge → régénérer/ré-appliquer nos lignes.
 ALLOWLIST=(
   "package.json"
   "package-lock.json"
@@ -25,12 +29,20 @@ ALLOWLIST=(
   ".claude-plugin/plugin.json"
   "gsd-core/bin/lib/capability-registry.cjs"
   "gsd-core/bin/lib/loop-host-contract.cjs"
-  # 3. Registres d'inventaire : le process upstream EXIGE une ligne par
-  #    agent/commande ajouté (cf. scripts/gen-inventory-manifest.cjs) —
-  #    modification sanctionnée par upstream lui-même. Conflit de merge →
-  #    régénérer le manifest (--write) et ré-appliquer nos lignes.
   "docs/INVENTORY.md"
   "docs/INVENTORY-MANIFEST.json"
+  "gsd-core/workflows/help/modes/full.md"
+  # Clusters de skills (/gsd-surface) : tout skill ajouté doit appartenir à un
+  # cluster (test runtime-artifact-layout-surface) ; source TS + artefact build.
+  "src/clusters.cts"
+  "gsd-core/bin/lib/clusters.cjs"
+  # Routage de namespace (#2792) : tout skill doit être routé par un ns-*.md.
+  "commands/gsd/ns-review.md"
+  "commands/gsd/ns-context.md"
+  # Registres-dans-les-tests (chemin contributeur documenté par leurs pruneHint) :
+  # KNOWN_SKILLS (#2790) et INTENTIONAL_ORPHANS (#3039).
+  "tests/enh-2790-skill-consolidation.test.cjs"
+  "tests/feat-3039-help-tiered.test.cjs"
 )
 
 if ! git rev-parse --verify --quiet "$UPSTREAM_REF" >/dev/null; then

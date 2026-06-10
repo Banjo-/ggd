@@ -37,6 +37,8 @@ const KNOWN_SKILLS = new Set([
   'extract-learnings.md',
   'fast.md',
   'forensics.md',
+  'gamedev-gate-check.md',
+  'gamedev-knowledge-context.md',
   'graphify.md',
   'health.md',
   'help.md',

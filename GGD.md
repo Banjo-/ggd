@@ -21,8 +21,14 @@ Documents de référence (dépôt d'analyse `comp`) :
 2. **Exceptions allowlistées** (et rien d'autre) : rebranding (`package.json`,
    `.claude-plugin/plugin.json`, `README.md`) ; artefacts **générés** par
    `npm run build` (`capability-registry.cjs`, `loop-host-contract.cjs`,
-   `docs/INVENTORY-MANIFEST.json`) ; et `docs/INVENTORY.md`, dont le process
-   upstream exige une ligne par agent/commande ajouté.
+   `docs/INVENTORY-MANIFEST.json`) ; et les **registres de parité** que le
+   process upstream exige de tenir à jour pour tout artefact ajouté :
+   `docs/INVENTORY.md` (une ligne par agent/commande) et
+   `gsd-core/workflows/help/modes/full.md` (parité bidirectionnelle
+   help ↔ commands, test #2954, flags compris).
+   Règle de validation : **toujours `npm test` complet avant push** — les
+   linters tournent en pretest (`lint:skill-deps`, budgets de description…),
+   `node --test` seul ne les exécute pas.
 3. **Vérification mécanique** : `scripts/ggd/check-additive.sh` échoue en CI
    (`.github/workflows/ggd.yml`) si la règle est violée.
 4. **Tout besoin hors-contrat part en PR upstream**, jamais en patch local.

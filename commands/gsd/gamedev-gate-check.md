@@ -1,6 +1,6 @@
 ---
 name: gsd:gamedev-gate-check
-description: Run GGD director gates (CD-PILLARS, TD-ARCHITECTURE, PR-SCOPE, AD-COHERENCE) on a phase and record advisory verdicts in GATE-REPORT.md
+description: Run GGD director gates on a phase and record advisory verdicts in GATE-REPORT.md
 argument-hint: "[phase number, e.g. '4'] [--review full|lean|solo] [--milestone]"
 allowed-tools:
   - Read

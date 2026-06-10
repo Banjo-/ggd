@@ -89,6 +89,11 @@ export const CLUSTERS: ClusterMap = Object.freeze({
     'ui-review',
   ]),
 
+  gamedev: Object.freeze([
+    'gamedev-gate-check',
+    'gamedev-knowledge-context',
+  ]),
+
   ai_eval: Object.freeze([
     'ai-integration-phase',
     'eval-review',

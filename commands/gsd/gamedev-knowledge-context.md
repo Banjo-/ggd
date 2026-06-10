@@ -1,6 +1,6 @@
 ---
 name: gsd:gamedev-knowledge-context
-description: Produce or refresh .planning/knowledge/project-context.md — the engine/version/conventions hub read first by knowledge packs, executors and the TD-ARCHITECTURE gate
+description: Produce the project knowledge hub (engine version safety, conventions) for packs and gates
 argument-hint: "[--draft | --interactive] [--engine-version <v>]"
 allowed-tools:
   - Read
@@ -36,7 +36,7 @@ TD-ARCHITECTURE gate treats a missing or stale file as a finding.
 Scan, in order, whatever exists:
 
 1. **Unreal:** `*.uproject` (`EngineAssociation` → pinned version; `Plugins` list;
-   `Modules` list), `Source/*/​*.Build.cs` (module dependencies), `Source/*/​*.Target.cs`,
+   `Modules` list), `Source/*/*.Build.cs` (module dependencies), `Source/*/*.Target.cs`,
    `Config/DefaultEngine.ini` (framework classes, renderer settings).
 2. **Godot:** `project.godot` (`config/features` → version), `addons/`.
 3. **Unity:** `ProjectSettings/ProjectVersion.txt`, `Packages/manifest.json`.

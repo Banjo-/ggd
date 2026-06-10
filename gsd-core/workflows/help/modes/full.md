@@ -595,6 +595,11 @@ The commands above cover the most common day-to-day flows. Every command listed 
 - **`/gsd:audit-fix --source <audit-uat> [--severity medium|high|all] [--max N] [--dry-run]`** — Autonomous audit-to-fix pipeline: find issues, classify, fix, test, commit.
 - **`/gsd:add-tests <phase> [additional instructions]`** — Generate tests for a completed phase based on UAT criteria and implementation.
 
+### Game Development (GGD)
+
+- **`/gsd:gamedev-knowledge-context [--draft | --interactive] [--engine-version <v>]`** — Produce the project knowledge hub: pinned engine version, version-safety risk table, conventions — read first by knowledge packs and the TD-ARCHITECTURE gate.
+- **`/gsd:gamedev-gate-check [phase] [--review full|lean|solo] [--milestone]`** — Run the GGD director gates (CD-PILLARS, TD-ARCHITECTURE, PR-SCOPE, AD-COHERENCE) and record advisory verdicts in GATE-REPORT.md.
+
 ### Diagnostics & Maintenance
 
 - **`/gsd:health [--repair] [--context]`** — Diagnose planning directory health and optionally repair issues.

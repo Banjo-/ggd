@@ -5,7 +5,7 @@ argument-hint: ""
 allowed-tools:
   - Read
   - Skill
-requires: [map-codebase, graphify, docs-update, extract-learnings]
+requires: [map-codebase, graphify, docs-update, extract-learnings, gamedev-knowledge-context]
 ---
 
 Route to the appropriate codebase-intelligence skill based on the user's intent.
@@ -19,5 +19,6 @@ Route to the appropriate codebase-intelligence skill based on the user's intent.
 | Generate a knowledge graph | gsd-graphify |
 | Update project documentation | gsd-docs-update |
 | Extract learnings from a completed phase | gsd-extract-learnings |
+| Pin engine version / project knowledge hub (game dev) | gsd-gamedev-knowledge-context |
 
 Invoke the matched skill directly using the Skill tool.

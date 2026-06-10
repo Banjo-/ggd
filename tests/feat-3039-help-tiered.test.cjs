@@ -326,6 +326,7 @@ describe('feature #3039: tiered help — topic alias coverage', () => {
       '### Workflow & Orchestration',
       '### Repository Integration',
       '### Namespace Routers (model-facing meta-skills)',
+      '### Game Development (GGD)',
     ]);
 
     const allHeadings = fullSrc.split('\n')
