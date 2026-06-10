@@ -5,20 +5,19 @@
  *
  * Trois familles :
  *   1. Enregistrement de la capability `gamedev` dans le registre généré.
- *   2. État squelette : config différée (voir note upstream ci-dessous).
+ *   2. Config fédérée : défauts et propriété des clés.
  *   3. Capteur de dérive du Loop Host Contract — notre seule interface avec
  *      upstream : si un des 12 points disparaît ou change de nom à un merge
  *      upstream, ce test casse AVANT que la capability ne se câble dessus.
  *
- * NOTE UPSTREAM (jalon 1) : les clés de config fédérées (gamedev.review_mode,
- * workflow.gdd_phase, workflow.director_gates, gamedev.autonomous_halt_on_reject)
- * sont différées. Cause : tests/federated-config.test.cjs §8 (« real registry:
- * all UI keys are central → no-op channel ») suppose que TOUTE clé fédérée est
- * centrale (pending-migration) — vrai tant que `ui` est la seule capability,
- * faux dès qu'une deuxième capability apporte des clés non-centrales (ce qui est
- * le design cible). PR upstream à proposer : généraliser ce test per-capability.
- * Quand elle atterrit : restaurer les slices dans capability.json et remplacer
- * le test « config différée » ci-dessous par les assertions de défauts.
+ * NOTE DIVERGENCE (décision utilisateur, 10 juin 2026) : la fédération des clés
+ * de config exigeait la généralisation de tests/federated-config.test.cjs §8
+ * (sur-contraint : il supposait que toute clé fédérée est centrale, vrai
+ * uniquement tant que `ui` est la seule capability). L'utilisateur ayant décliné
+ * la PR upstream, la correction est appliquée LOCALEMENT comme divergence
+ * assumée et allowlistée (famille 4 du garde-fou). En cas de conflit de merge
+ * sur ce fichier upstream : conserver notre version généralisée (strictement
+ * plus forte) et re-vérifier qu'elle couvre les assertions upstream du moment.
  */
 
 const { test } = require('node:test');
@@ -54,17 +53,38 @@ test('gamedev au jalon 1 : skill gate-check + 4 juges, steps/gates non câblés'
   ]);
 });
 
-// ─── 2. Config différée (capteur de réactivation) ────────────────────────────
+// ─── 2. Config fédérée ───────────────────────────────────────────────────────
 
-test('config différée : aucune clé gamedev fédérée tant que la PR upstream n\'a pas atterri', () => {
-  const cap = registry.capabilities.gamedev;
-  assert.deepEqual(
-    cap.config, {},
-    'des clés de config sont apparues : vérifier que federated-config.test.cjs §8 a été ' +
-    'généralisé upstream, puis remplacer ce test par les assertions de défauts (voir NOTE en tête)',
-  );
-  for (const key of Object.keys(registry.configKeys)) {
-    assert.notEqual(registry.configKeys[key], 'gamedev', `clé fédérée inattendue: ${key}`);
+test('review_mode : enum full|lean|solo, défaut lean', () => {
+  const slice = registry.capabilities.gamedev.config['gamedev.review_mode'];
+  assert.ok(slice, 'clé gamedev.review_mode absente');
+  assert.equal(slice.type, 'enum');
+  assert.deepEqual([...slice.values].sort(), ['full', 'lean', 'solo']);
+  assert.equal(slice.default, 'lean');
+});
+
+test('toggles de workflow : gdd_phase et director_gates actifs par défaut', () => {
+  const cfg = registry.capabilities.gamedev.config;
+  assert.equal(cfg['workflow.gdd_phase'].type, 'boolean');
+  assert.equal(cfg['workflow.gdd_phase'].default, true);
+  assert.equal(cfg['workflow.director_gates'].type, 'boolean');
+  assert.equal(cfg['workflow.director_gates'].default, true);
+});
+
+test('halt_on_reject : opt-in (défaut false — mode autonome à la GSD)', () => {
+  const slice = registry.capabilities.gamedev.config['gamedev.autonomous_halt_on_reject'];
+  assert.equal(slice.type, 'boolean');
+  assert.equal(slice.default, false);
+});
+
+test('les clés gamedev sont fédérées et possédées par gamedev', () => {
+  for (const key of [
+    'gamedev.review_mode',
+    'workflow.gdd_phase',
+    'workflow.director_gates',
+    'gamedev.autonomous_halt_on_reject',
+  ]) {
+    assert.equal(registry.configKeys[key], 'gamedev', `clé absente ou mal possédée: ${key}`);
   }
 });
 

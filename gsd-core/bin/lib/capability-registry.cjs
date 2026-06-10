@@ -11,7 +11,7 @@ const capabilities = {
     "id": "gamedev",
     "role": "feature",
     "title": "Game development studio",
-    "description": "Director-gate governance, GDD design contracts and engine knowledge packs for game projects (GGD - Get Games Done). Config keys (gamedev.review_mode, workflow.gdd_phase, workflow.director_gates, gamedev.autonomous_halt_on_reject) land at milestone 1, blocked on upstream PR: federated-config no-op test is over-constrained for a second capability with non-central keys.",
+    "description": "Director-gate governance, GDD design contracts and engine knowledge packs for game projects (GGD - Get Games Done).",
     "tier": "full",
     "requires": [],
     "skills": [
@@ -25,7 +25,33 @@ const capabilities = {
       "ggd-art-director"
     ],
     "hooks": [],
-    "config": {},
+    "config": {
+      "gamedev.review_mode": {
+        "type": "enum",
+        "values": [
+          "full",
+          "lean",
+          "solo"
+        ],
+        "default": "lean",
+        "description": "Director gate intensity: full (gates at every design step), lean (milestone transitions only), solo (no director gates)."
+      },
+      "workflow.gdd_phase": {
+        "type": "boolean",
+        "default": true,
+        "description": "Produce a GDD design contract during discuss. Step wiring lands with the gdd-phase skill (GGD milestone 2)."
+      },
+      "workflow.director_gates": {
+        "type": "boolean",
+        "default": true,
+        "description": "Run director verdict gates at phase transitions via /gsd-gamedev-gate-check."
+      },
+      "gamedev.autonomous_halt_on_reject": {
+        "type": "boolean",
+        "default": false,
+        "description": "Halt autonomous runs on a director REJECT verdict instead of recording it in the REVIEW-DIGEST."
+      }
+    },
     "steps": [],
     "contributions": [],
     "gates": []
@@ -231,12 +257,45 @@ const byLoopPoint = {
 };
 
 const configKeys = {
+  "gamedev.review_mode": "gamedev",
+  "workflow.gdd_phase": "gamedev",
+  "workflow.director_gates": "gamedev",
+  "gamedev.autonomous_halt_on_reject": "gamedev",
   "workflow.ui_phase": "ui",
   "workflow.ui_review": "ui",
   "workflow.ui_safety_gate": "ui"
 };
 
 const configSchema = {
+  "gamedev.review_mode": {
+    "owner": "gamedev",
+    "type": "enum",
+    "default": "lean",
+    "description": "Director gate intensity: full (gates at every design step), lean (milestone transitions only), solo (no director gates).",
+    "values": [
+      "full",
+      "lean",
+      "solo"
+    ]
+  },
+  "workflow.gdd_phase": {
+    "owner": "gamedev",
+    "type": "boolean",
+    "default": true,
+    "description": "Produce a GDD design contract during discuss. Step wiring lands with the gdd-phase skill (GGD milestone 2)."
+  },
+  "workflow.director_gates": {
+    "owner": "gamedev",
+    "type": "boolean",
+    "default": true,
+    "description": "Run director verdict gates at phase transitions via /gsd-gamedev-gate-check."
+  },
+  "gamedev.autonomous_halt_on_reject": {
+    "owner": "gamedev",
+    "type": "boolean",
+    "default": false,
+    "description": "Halt autonomous runs on a director REJECT verdict instead of recording it in the REVIEW-DIGEST."
+  },
   "workflow.ui_phase": {
     "owner": "ui",
     "type": "boolean",

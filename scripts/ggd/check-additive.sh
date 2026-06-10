@@ -43,6 +43,11 @@ ALLOWLIST=(
   # KNOWN_SKILLS (#2790) et INTENTIONAL_ORPHANS (#3039).
   "tests/enh-2790-skill-consolidation.test.cjs"
   "tests/feat-3039-help-tiered.test.cjs"
+  # 4. DIVERGENCE ASSUMÉE (décision utilisateur 10/06/2026, PR upstream déclinée) :
+  #    §8 généralisé per-clé (le test upstream supposait « toute clé fédérée est
+  #    centrale », faux dès une 2e capability). Notre version est strictement plus
+  #    forte. Conflit de merge → garder notre version, re-vérifier la couverture.
+  "tests/federated-config.test.cjs"
 )
 
 if ! git rev-parse --verify --quiet "$UPSTREAM_REF" >/dev/null; then

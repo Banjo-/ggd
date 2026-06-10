@@ -31,15 +31,18 @@ Documents de référence (dépôt d'analyse `comp`) :
    `node --test` seul ne les exécute pas.
 3. **Vérification mécanique** : `scripts/ggd/check-additive.sh` échoue en CI
    (`.github/workflows/ggd.yml`) si la règle est violée.
-4. **Tout besoin hors-contrat part en PR upstream**, jamais en patch local.
-   File d'attente :
-   - **Généraliser `federated-config.test.cjs` §8** (« all UI keys are central → no-op ») :
-     le test suppose que toute clé fédérée est centrale, ce qui casse pour toute deuxième
-     capability apportant des clés non-centrales — le design cible. **Bloque la fédération
-     des clés de config `gamedev`** (différées, voir `tests/ggd-capability-gamedev.test.cjs`).
-   - Tier `fable` + profil `frontier` dans `model-catalog.json` (confort — l'intégration
-     par `model_overrides` fonctionne sans).
-   - ADR « external capability loader » (anticipé par ADR-857/894 — c'est la sortie du fork).
+4. **Politique de contribution upstream (décision utilisateur, 10/06/2026) : pas de PR.**
+   Conséquence : les besoins hors-contrat sont traités en **divergences assumées**,
+   allowlistées individuellement avec consigne de résolution de conflit (famille 4
+   du garde-fou). Divergences actives :
+   - `tests/federated-config.test.cjs` §8 généralisé per-clé (le test upstream
+     supposait « toute clé fédérée est centrale », faux dès une 2e capability —
+     notre version est strictement plus forte). Débloque la fédération des clés
+     de config `gamedev`.
+   Pistes restantes sans urgence : tier `fable` + profil `frontier` dans
+   `model-catalog.json` (confort — `model_overrides` fonctionne sans) ;
+   loader de capabilities externes (ADR-857/894) — sans PR upstream, la sortie
+   du fork n'est plus un objectif : le fork EST le produit.
 
 ## Branches et synchronisation
 
