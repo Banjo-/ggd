@@ -39,6 +39,9 @@ Documents de référence (dépôt d'analyse `comp`) :
      supposait « toute clé fédérée est centrale », faux dès une 2e capability —
      notre version est strictement plus forte). Débloque la fédération des clés
      de config `gamedev`.
+   - `tests/capability-command-dispatch.test.cjs` : « commandFamilies est vide
+     aujourd'hui » généralisé en assertions de forme per-famille. Débloque la
+     famille CLI `ggd-gdd` (premier usage réel du mécanisme ADR-959).
    Pistes restantes sans urgence : tier `fable` + profil `frontier` dans
    `model-catalog.json` (confort — `model_overrides` fonctionne sans) ;
    loader de capabilities externes (ADR-857/894) — sans PR upstream, la sortie

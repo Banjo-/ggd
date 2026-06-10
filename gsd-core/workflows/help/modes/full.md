@@ -598,6 +598,7 @@ The commands above cover the most common day-to-day flows. Every command listed 
 ### Game Development (GGD)
 
 - **`/gsd:gamedev-knowledge-context [--draft | --interactive] [--engine-version <v>]`** — Produce the project knowledge hub: pinned engine version, version-safety risk table, conventions — read first by knowledge packs and the TD-ARCHITECTURE gate.
+- **`/gsd:gamedev-gdd-phase [phase] [system-name] [--review full|lean|solo]`** — Produce a GDD design contract (8 sections, requirement IDs GDD-SYS-RNN) consumed by the planner; coverage is enforced by `gsd-tools ggd-gdd coverage` before execution.
 - **`/gsd:gamedev-gate-check [phase] [--review full|lean|solo] [--milestone]`** — Run the GGD director gates (CD-PILLARS, TD-ARCHITECTURE, PR-SCOPE, AD-COHERENCE) and record advisory verdicts in GATE-REPORT.md.
 
 ### Diagnostics & Maintenance

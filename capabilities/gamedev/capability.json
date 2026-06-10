@@ -7,13 +7,15 @@
   "requires": [],
   "skills": [
     "gamedev-gate-check",
-    "gamedev-knowledge-context"
+    "gamedev-knowledge-context",
+    "gamedev-gdd-phase"
   ],
   "agents": [
     "ggd-creative-director",
     "ggd-technical-director",
     "ggd-producer",
-    "ggd-art-director"
+    "ggd-art-director",
+    "ggd-game-designer"
   ],
   "hooks": [],
   "config": {
@@ -43,7 +45,56 @@
       "description": "Halt autonomous runs on a director REJECT verdict instead of recording it in the REVIEW-DIGEST."
     }
   },
-  "steps": [],
+  "steps": [
+    {
+      "point": "discuss:post",
+      "ref": {
+        "skill": "gamedev-gdd-phase"
+      },
+      "produces": [
+        "GDD.md"
+      ],
+      "consumes": [
+        "CONTEXT.md"
+      ],
+      "when": "workflow.gdd_phase",
+      "onError": "skip"
+    },
+    {
+      "point": "plan:post",
+      "ref": {
+        "skill": "gamedev-gate-check"
+      },
+      "produces": [
+        "GATE-REPORT.md"
+      ],
+      "consumes": [
+        "PLAN.md"
+      ],
+      "when": "workflow.director_gates",
+      "onError": "skip"
+    }
+  ],
   "contributions": [],
-  "gates": []
+  "gates": [
+    {
+      "point": "execute:pre",
+      "check": {
+        "query": "ggd-gdd.coverage"
+      },
+      "when": "workflow.gdd_phase",
+      "blocking": true,
+      "onError": "halt"
+    }
+  ],
+  "commands": [
+    {
+      "family": "ggd-gdd",
+      "module": "ggd-gdd.cjs",
+      "router": "routeGgdGddCommand",
+      "subcommands": [
+        "coverage"
+      ]
+    }
+  ]
 }

@@ -45,10 +45,10 @@ test('le hub est câblé sur le gate TD-ARCHITECTURE (boucle savoir → jugement
   );
 });
 
-test('la capability gamedev déclare les deux skills du studio', () => {
+test('la capability gamedev déclare knowledge-context parmi ses skills', () => {
   const registry = require('../gsd-core/bin/lib/capability-registry.cjs');
-  assert.deepEqual(
-    [...registry.capabilities.gamedev.skills].sort(),
-    ['gamedev-gate-check', 'gamedev-knowledge-context'],
+  assert.ok(
+    registry.capabilities.gamedev.skills.includes('gamedev-knowledge-context'),
+    'gamedev-knowledge-context absent du manifeste',
   );
 });

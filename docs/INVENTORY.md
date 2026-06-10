@@ -55,12 +55,13 @@ Full roster at `agents/gsd-*.md`. The "Primary doc" column flags whether [`docs/
 | ggd-technical-director | GGD director judge for gate TD-ARCHITECTURE (engine-version safety, ownership, budgets). | `/gsd-gamedev-gate-check` | inventory only |
 | ggd-producer | GGD director judge for gate PR-SCOPE (scope realism, sequencing, shippability). | `/gsd-gamedev-gate-check` | inventory only |
 | ggd-art-director | GGD director judge for gate AD-COHERENCE (audiovisual identity coherence). | `/gsd-gamedev-gate-check` | inventory only |
+| ggd-game-designer | GGD design consultant drafting GDD sections with professional frameworks (MDA, SDT, Bartle). | `/gsd-gamedev-gdd-phase` | inventory only |
 
 **Coverage note.** `docs/AGENTS.md` gives full role cards for 21 primary agents plus concise stubs for the 12 advanced agents. The Agent Tool Permissions Summary in that file covers only the primary 21 agents; the advanced agents' tool lists are captured in their per-agent frontmatter in `agents/gsd-*.md`.
 
 ---
 
-## Commands (69 shipped)
+## Commands (70 shipped)
 
 Full roster at `commands/gsd/*.md`. The groupings below mirror `docs/COMMANDS.md` section order; each row carries the command name, a one-line role derived from the command's frontmatter `description:`, and a link to the source file. `tests/command-count-sync.test.cjs` locks the count against the filesystem.
 
@@ -101,6 +102,7 @@ These six routers are descriptor-only entries that the model picks first; the bo
 | `/gsd-ui-review` | Retroactive 6-pillar visual audit of implemented frontend code. | [commands/gsd/ui-review.md](../commands/gsd/ui-review.md) |
 | `/gsd-gamedev-gate-check` | Run GGD director gates and record advisory verdicts in GATE-REPORT.md. | [commands/gsd/gamedev-gate-check.md](../commands/gsd/gamedev-gate-check.md) |
 | `/gsd-gamedev-knowledge-context` | Produce the engine/version/conventions hub read first by knowledge packs and the TD-ARCHITECTURE gate. | [commands/gsd/gamedev-knowledge-context.md](../commands/gsd/gamedev-knowledge-context.md) |
+| `/gsd-gamedev-gdd-phase` | Produce a GDD design contract with traceable requirement IDs (coverage enforced pre-execution). | [commands/gsd/gamedev-gdd-phase.md](../commands/gsd/gamedev-gdd-phase.md) |
 | `/gsd-code-review` | Review source files changed during a phase for bugs, security, and code-quality problems; use `--fix` to auto-apply findings. | [commands/gsd/code-review.md](../commands/gsd/code-review.md) |
 | `/gsd-eval-review` | Retroactively audit an executed AI phase's evaluation coverage; produces EVAL-REVIEW.md. | [commands/gsd/eval-review.md](../commands/gsd/eval-review.md) |
 
@@ -376,7 +378,7 @@ The `gsd-planner` agent is decomposed into a core agent plus reference modules t
 
 ---
 
-## CLI Modules (102 shipped)
+## CLI Modules (103 shipped)
 
 Full listing: `gsd-core/bin/lib/*.cjs`.
 
@@ -414,6 +416,7 @@ Full listing: `gsd-core/bin/lib/*.cjs`.
 | `federated-config.cjs` | Defensive merge of capability-declared config slices into the loadConfig return value — ADR-857 phase 3b; exports `mergeFederatedConfig({ configSchema, isCentralKey, userConfig })` → `{ values, validKeys, warnings }`; no-op until a key is atomically removed from the central config-schema (the cutover step) |
 | `frontmatter.cjs` | YAML frontmatter CRUD operations |
 | `gap-checker.cjs` | Post-planning gap analysis (#2493): unified REQUIREMENTS.md + CONTEXT.md decisions vs PLAN.md coverage report (`gsd-tools gap-analysis`) |
+| `ggd-gdd.cjs` | GGD capability command family `ggd-gdd` (ADR-959): `coverage` checks every GDD requirement ID is referenced by a plan — the blocking pre-execution gate |
 | `graphify.cjs` | Knowledge-graph build/query/status/diff for `/gsd-graphify` |
 | `gsd2-import.cjs` | External-plan ingest for `/gsd-import --from-gsd2` |
 | `init-command-router.cjs` | Thin CJS subcommand router adapter for `gsd-tools init` |

@@ -36,21 +36,34 @@ test('gamedev est enregistrée comme capability feature', () => {
   assert.deepEqual(cap.requires, []);
 });
 
-test('gamedev au jalon 1 : skill gate-check + 4 juges, steps/gates non câblés', () => {
+test('gamedev au jalon 2 : 3 skills, 5 agents, steps/gates/commandes câblés', () => {
   const cap = registry.capabilities.gamedev;
-  // Le câblage steps/gates arrive avec la fédération de config (le `when:`
-  // des steps référencera les clés différées — voir NOTE en tête). Si ce test
-  // casse parce qu'on ajoute un step, c'est normal : le mettre à jour en même
-  // temps que le manifeste.
-  assert.deepEqual(cap.steps, []);
-  assert.deepEqual(cap.gates, []);
-  assert.deepEqual([...cap.skills].sort(), ['gamedev-gate-check', 'gamedev-knowledge-context']);
+  assert.deepEqual([...cap.skills].sort(), [
+    'gamedev-gate-check', 'gamedev-gdd-phase', 'gamedev-knowledge-context',
+  ]);
   assert.deepEqual([...cap.agents].sort(), [
     'ggd-art-director',
     'ggd-creative-director',
+    'ggd-game-designer',
     'ggd-producer',
     'ggd-technical-director',
   ]);
+
+  // Steps déclarés : gdd-phase à discuss:post, gate-check à plan:post.
+  assert.deepEqual(
+    cap.steps.map((s) => [s.point, s.ref.skill, s.when]),
+    [
+      ['discuss:post', 'gamedev-gdd-phase', 'workflow.gdd_phase'],
+      ['plan:post', 'gamedev-gate-check', 'workflow.director_gates'],
+    ],
+  );
+
+  // Gate mécanique BLOQUANT à execute:pre (couverture GDD→plan) — par
+  // contraste avec les verdicts directeurs, advisory.
+  assert.equal(cap.gates.length, 1);
+  assert.equal(cap.gates[0].point, 'execute:pre');
+  assert.equal(cap.gates[0].blocking, true);
+  assert.equal(cap.gates[0].check.query, 'ggd-gdd.coverage');
 });
 
 // ─── 2. Config fédérée ───────────────────────────────────────────────────────

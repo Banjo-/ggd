@@ -744,14 +744,22 @@ describe('dispatchCapabilityCommand — async router returns a Promise → struc
 // ─── 9. Behavior-preservation: real registry has empty commandFamilies ────────
 
 describe('dispatchCapabilityCommand — real registry behavior-preservation', () => {
-  test('real capability-registry.cjs commandFamilies is {} (no capability declares commands)', () => {
+  // DIVERGENCE GGD (décision 10/06/2026, voir GGD.md famille 4) : l'assertion
+  // d'origine épinglait l'état transitoire « aucune capability ne déclare de
+  // commande » — faux depuis que gamedev contribue la famille ggd-gdd, premier
+  // usage réel du mécanisme ADR-959. Version généralisée : chaque entrée de
+  // commandFamilies est bien formée et possédée par une capability enregistrée.
+  test('real capability-registry.cjs commandFamilies entries are well-formed and capability-owned', () => {
     const realRegistry = require('../gsd-core/bin/lib/capability-registry.cjs');
     assert.ok(realRegistry.commandFamilies, 'commandFamilies must be exported');
-    assert.deepEqual(
-      Object.keys(realRegistry.commandFamilies),
-      [],
-      'real registry commandFamilies must be empty today',
-    );
+    for (const [family, entry] of Object.entries(realRegistry.commandFamilies)) {
+      assert.ok(realRegistry.capabilities[entry.capId],
+        `family "${family}": capId "${entry.capId}" is not a registered capability`);
+      assert.match(entry.module, /^[A-Za-z0-9._-]+\.cjs$/,
+        `family "${family}": module must be a bare .cjs basename`);
+      assert.ok(typeof entry.router === 'string' && entry.router.length > 0,
+        `family "${family}": router must be a non-empty string`);
+    }
   });
 
   test('unknown command against real registry returns false (behavior-preserving)', () => {

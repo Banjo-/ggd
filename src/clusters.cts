@@ -91,6 +91,7 @@ export const CLUSTERS: ClusterMap = Object.freeze({
 
   gamedev: Object.freeze([
     'gamedev-gate-check',
+    'gamedev-gdd-phase',
     'gamedev-knowledge-context',
   ]),
 

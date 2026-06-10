@@ -5,7 +5,7 @@ argument-hint: ""
 allowed-tools:
   - Read
   - Skill
-requires: [code-review, audit-uat, secure-phase, eval-review, ui-review, validate-phase, debug, forensics, audit-fix, review, ui-phase, gamedev-gate-check]
+requires: [code-review, audit-uat, secure-phase, eval-review, ui-review, validate-phase, debug, forensics, audit-fix, review, ui-phase, gamedev-gate-check, gamedev-gdd-phase]
 ---
 
 Route to the appropriate quality / review skill based on the user's intent.
@@ -26,5 +26,6 @@ Route to the appropriate quality / review skill based on the user's intent.
 | Cross-AI peer review of plans | gsd-review |
 | Generate a UI design contract | gsd-ui-phase |
 | Run game-dev director gates on a phase | gsd-gamedev-gate-check |
+| Generate a game design document (GDD) contract | gsd-gamedev-gdd-phase |
 
 Invoke the matched skill directly using the Skill tool.

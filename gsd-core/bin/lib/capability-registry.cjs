@@ -16,13 +16,15 @@ const capabilities = {
     "requires": [],
     "skills": [
       "gamedev-gate-check",
-      "gamedev-knowledge-context"
+      "gamedev-knowledge-context",
+      "gamedev-gdd-phase"
     ],
     "agents": [
       "ggd-creative-director",
       "ggd-technical-director",
       "ggd-producer",
-      "ggd-art-director"
+      "ggd-art-director",
+      "ggd-game-designer"
     ],
     "hooks": [],
     "config": {
@@ -52,9 +54,58 @@ const capabilities = {
         "description": "Halt autonomous runs on a director REJECT verdict instead of recording it in the REVIEW-DIGEST."
       }
     },
-    "steps": [],
+    "steps": [
+      {
+        "point": "discuss:post",
+        "ref": {
+          "skill": "gamedev-gdd-phase"
+        },
+        "produces": [
+          "GDD.md"
+        ],
+        "consumes": [
+          "CONTEXT.md"
+        ],
+        "when": "workflow.gdd_phase",
+        "onError": "skip"
+      },
+      {
+        "point": "plan:post",
+        "ref": {
+          "skill": "gamedev-gate-check"
+        },
+        "produces": [
+          "GATE-REPORT.md"
+        ],
+        "consumes": [
+          "PLAN.md"
+        ],
+        "when": "workflow.director_gates",
+        "onError": "skip"
+      }
+    ],
     "contributions": [],
-    "gates": []
+    "gates": [
+      {
+        "point": "execute:pre",
+        "check": {
+          "query": "ggd-gdd.coverage"
+        },
+        "when": "workflow.gdd_phase",
+        "blocking": true,
+        "onError": "halt"
+      }
+    ],
+    "commands": [
+      {
+        "family": "ggd-gdd",
+        "module": "ggd-gdd.cjs",
+        "router": "routeGgdGddCommand",
+        "subcommands": [
+          "coverage"
+        ]
+      }
+    ]
   },
   "ui": {
     "id": "ui",
@@ -137,6 +188,7 @@ const capabilities = {
 const bySkill = {
   "gamedev-gate-check": "gamedev",
   "gamedev-knowledge-context": "gamedev",
+  "gamedev-gdd-phase": "gamedev",
   "ui-phase": "ui",
   "ui-review": "ui"
 };
@@ -146,6 +198,7 @@ const byAgent = {
   "ggd-technical-director": "gamedev",
   "ggd-producer": "gamedev",
   "ggd-art-director": "gamedev",
+  "ggd-game-designer": "gamedev",
   "gsd-ui-checker": "ui",
   "gsd-ui-auditor": "ui"
 };
@@ -157,7 +210,23 @@ const byLoopPoint = {
     "gates": []
   },
   "discuss:post": {
-    "steps": [],
+    "steps": [
+      {
+        "capId": "gamedev",
+        "point": "discuss:post",
+        "ref": {
+          "skill": "gamedev-gdd-phase"
+        },
+        "produces": [
+          "GDD.md"
+        ],
+        "consumes": [
+          "CONTEXT.md"
+        ],
+        "when": "workflow.gdd_phase",
+        "onError": "skip"
+      }
+    ],
     "contributions": [],
     "gates": []
   },
@@ -183,14 +252,41 @@ const byLoopPoint = {
     "gates": []
   },
   "plan:post": {
-    "steps": [],
+    "steps": [
+      {
+        "capId": "gamedev",
+        "point": "plan:post",
+        "ref": {
+          "skill": "gamedev-gate-check"
+        },
+        "produces": [
+          "GATE-REPORT.md"
+        ],
+        "consumes": [
+          "PLAN.md"
+        ],
+        "when": "workflow.director_gates",
+        "onError": "skip"
+      }
+    ],
     "contributions": [],
     "gates": []
   },
   "execute:pre": {
     "steps": [],
     "contributions": [],
-    "gates": []
+    "gates": [
+      {
+        "capId": "gamedev",
+        "point": "execute:pre",
+        "check": {
+          "query": "ggd-gdd.coverage"
+        },
+        "when": "workflow.gdd_phase",
+        "blocking": true,
+        "onError": "halt"
+      }
+    ]
   },
   "execute:wave:pre": {
     "steps": [],
@@ -318,11 +414,18 @@ const configSchema = {
 
 const runtimes = {};
 
-const commandFamilies = {};
+const commandFamilies = {
+  "ggd-gdd": {
+    "capId": "gamedev",
+    "module": "ggd-gdd.cjs",
+    "router": "routeGgdGddCommand"
+  }
+};
 
 const capabilityClusters = {
   "gamedev": [
     "gamedev-gate-check",
+    "gamedev-gdd-phase",
     "gamedev-knowledge-context"
   ],
   "ui": [
