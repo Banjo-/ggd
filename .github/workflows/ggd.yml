@@ -1,0 +1,63 @@
+# CI GGD — s'ajoute à la CI upstream (qui continue de tourner sur le fork).
+#
+# Quatre garanties :
+#   1. Le build passe et les registres générés ne sont pas périmés.
+#   2. La suite de tests upstream reste verte (rien de cassé par nos ajouts).
+#   3. Nos propres tests (tests/ggd-*.test.cjs) passent.
+#   4. Le garde-fou additif tient : aucun fichier upstream modifié hors allowlist.
+name: ggd
+
+on:
+  push:
+    branches: [ggd-main]
+  pull_request:
+    branches: [ggd-main]
+
+jobs:
+  ggd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # le garde-fou additif a besoin de l'historique pour le merge-base
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build (régénère les registres)
+        run: npm run build
+
+      - name: Registre de capabilities non périmé
+        run: node scripts/gen-capability-registry.cjs --check
+
+      - name: Tests upstream
+        run: npm test
+
+      - name: Tests GGD
+        run: |
+          shopt -s nullglob
+          files=(tests/ggd-*.test.cjs)
+          if [ ${#files[@]} -gt 0 ]; then
+            node --test "${files[@]}"
+          else
+            echo "Aucun test GGD pour l'instant (tests/ggd-*.test.cjs) — étape neutre."
+          fi
+
+      - name: Lint des gates GGD
+        run: |
+          if [ -f scripts/ggd/lint-gates.cjs ]; then
+            node scripts/ggd/lint-gates.cjs
+          else
+            echo "Linter de gates pas encore créé (jalon 1) — étape neutre."
+          fi
+
+      - name: Garde-fou additif (upgradabilité)
+        run: |
+          git remote add upstream https://github.com/open-gsd/gsd-core.git 2>/dev/null || true
+          git fetch upstream next --quiet
+          bash scripts/ggd/check-additive.sh upstream/next
