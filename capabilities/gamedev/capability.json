@@ -6,7 +6,8 @@
   "tier": "full",
   "requires": [],
   "skills": [
-    "gamedev-gate-check"
+    "gamedev-gate-check",
+    "gamedev-knowledge-context"
   ],
   "agents": [
     "ggd-creative-director",

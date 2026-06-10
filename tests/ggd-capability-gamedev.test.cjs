@@ -45,7 +45,7 @@ test('gamedev au jalon 1 : skill gate-check + 4 juges, steps/gates non câblés'
   // temps que le manifeste.
   assert.deepEqual(cap.steps, []);
   assert.deepEqual(cap.gates, []);
-  assert.deepEqual(cap.skills, ['gamedev-gate-check']);
+  assert.deepEqual([...cap.skills].sort(), ['gamedev-gate-check', 'gamedev-knowledge-context']);
   assert.deepEqual([...cap.agents].sort(), [
     'ggd-art-director',
     'ggd-creative-director',

@@ -60,7 +60,7 @@ Full roster at `agents/gsd-*.md`. The "Primary doc" column flags whether [`docs/
 
 ---
 
-## Commands (68 shipped)
+## Commands (69 shipped)
 
 Full roster at `commands/gsd/*.md`. The groupings below mirror `docs/COMMANDS.md` section order; each row carries the command name, a one-line role derived from the command's frontmatter `description:`, and a link to the source file. `tests/command-count-sync.test.cjs` locks the count against the filesystem.
 
@@ -100,6 +100,7 @@ These six routers are descriptor-only entries that the model picks first; the bo
 | `/gsd-quick` | Execute a quick task with GSD guarantees (atomic commits, state tracking) but skip optional agents. | [commands/gsd/quick.md](../commands/gsd/quick.md) |
 | `/gsd-ui-review` | Retroactive 6-pillar visual audit of implemented frontend code. | [commands/gsd/ui-review.md](../commands/gsd/ui-review.md) |
 | `/gsd-gamedev-gate-check` | Run GGD director gates and record advisory verdicts in GATE-REPORT.md. | [commands/gsd/gamedev-gate-check.md](../commands/gsd/gamedev-gate-check.md) |
+| `/gsd-gamedev-knowledge-context` | Produce the engine/version/conventions hub read first by knowledge packs and the TD-ARCHITECTURE gate. | [commands/gsd/gamedev-knowledge-context.md](../commands/gsd/gamedev-knowledge-context.md) |
 | `/gsd-code-review` | Review source files changed during a phase for bugs, security, and code-quality problems; use `--fix` to auto-apply findings. | [commands/gsd/code-review.md](../commands/gsd/code-review.md) |
 | `/gsd-eval-review` | Retroactively audit an executed AI phase's evaluation coverage; produces EVAL-REVIEW.md. | [commands/gsd/eval-review.md](../commands/gsd/eval-review.md) |
 

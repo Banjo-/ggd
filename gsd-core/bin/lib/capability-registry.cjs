@@ -15,7 +15,8 @@ const capabilities = {
     "tier": "full",
     "requires": [],
     "skills": [
-      "gamedev-gate-check"
+      "gamedev-gate-check",
+      "gamedev-knowledge-context"
     ],
     "agents": [
       "ggd-creative-director",
@@ -109,6 +110,7 @@ const capabilities = {
 
 const bySkill = {
   "gamedev-gate-check": "gamedev",
+  "gamedev-knowledge-context": "gamedev",
   "ui-phase": "ui",
   "ui-review": "ui"
 };
@@ -261,7 +263,8 @@ const commandFamilies = {};
 
 const capabilityClusters = {
   "gamedev": [
-    "gamedev-gate-check"
+    "gamedev-gate-check",
+    "gamedev-knowledge-context"
   ],
   "ui": [
     "ui-phase",
