@@ -23,9 +23,14 @@ Documents de référence (dépôt d'analyse `comp`) :
 3. **Vérification mécanique** : `scripts/ggd/check-additive.sh` échoue en CI
    (`.github/workflows/ggd.yml`) si la règle est violée.
 4. **Tout besoin hors-contrat part en PR upstream**, jamais en patch local.
-   File d'attente : détection 1M de `claude-fable-5`, tier `fable` +
-   profil `frontier` dans `model-catalog.json`, ADR « external capability loader »
-   (anticipé par ADR-857/894 — c'est la sortie du fork).
+   File d'attente :
+   - **Généraliser `federated-config.test.cjs` §8** (« all UI keys are central → no-op ») :
+     le test suppose que toute clé fédérée est centrale, ce qui casse pour toute deuxième
+     capability apportant des clés non-centrales — le design cible. **Bloque la fédération
+     des clés de config `gamedev`** (différées, voir `tests/ggd-capability-gamedev.test.cjs`).
+   - Tier `fable` + profil `frontier` dans `model-catalog.json` (confort — l'intégration
+     par `model_overrides` fonctionne sans).
+   - ADR « external capability loader » (anticipé par ADR-857/894 — c'est la sortie du fork).
 
 ## Branches et synchronisation
 
