@@ -641,10 +641,10 @@ describe('FIX 6c: N-level nested write and prototype-pollution via dotted keys',
   });
 });
 
-// ─── 8. Real registry — all UI keys are central (no-op guarantee) ────────────
+// ─── 8. Real registry — central keys no-op, non-central keys resolve ─────────
 
-describe('real registry: all UI keys are central → no-op channel', () => {
-  test('with real capability-registry, all configSchema keys are skipped (pending-migration)', () => {
+describe('real registry: central keys are skipped, non-central keys resolve', () => {
+  test('with real capability-registry, central keys are pending-migration and non-central keys merge', () => {
     const capRegistry = require('../gsd-core/bin/lib/capability-registry.cjs');
     const configSchemaFromRegistry = capRegistry.configSchema;
 
@@ -663,14 +663,45 @@ describe('real registry: all UI keys are central → no-op channel', () => {
       userConfig: {},
     });
 
-    // Every key should be skipped (pending-migration) because UI keys are still in central schema
-    assert.strictEqual(Object.keys(result.values).length, 0, 'values must be empty — all keys are central (pending-migration)');
-    assert.deepEqual(result.validKeys, [], 'validKeys must be empty');
-    assert.ok(result.warnings.length > 0, 'Should have pending-migration warnings');
+    // Per-key contract, valid for ANY set of registered capabilities:
+    // - a key still present in the central schema is skipped with a
+    //   pending-migration warning (the no-op guarantee);
+    // - a key absent from the central schema (the target design for
+    //   capability-owned keys, ADR-894) resolves through the federated channel.
+    // The previous version asserted `values` to be globally empty, which only
+    // held while `ui` (whose keys are all still central) was the sole
+    // registered capability — any second capability declaring non-central
+    // keys broke it even though the channel behaved exactly as designed.
+    for (const key of Object.keys(configSchemaFromRegistry)) {
+      if (isValidConfigKey(key)) {
+        assert.ok(
+          !(key in result.values),
+          'central key "' + key + '" must be skipped (pending-migration)',
+        );
+        assert.ok(
+          result.warnings.some((w) => w.includes(key)),
+          'Should have a pending-migration warning for ' + key + ', got: ' + JSON.stringify(result.warnings),
+        );
+      } else {
+        assert.ok(
+          key in result.values,
+          'non-central federated key "' + key + '" must resolve through the federated channel',
+        );
+        assert.ok(
+          result.validKeys.includes(key),
+          'non-central federated key "' + key + '" must be listed in validKeys',
+        );
+      }
+    }
 
-    // Confirm each UI key specifically
+    // UI keys specifically are still central today (pending-migration):
+    // preserve the original explicit no-op guarantee for them.
     const uiKeys = ['workflow.ui_phase', 'workflow.ui_review', 'workflow.ui_safety_gate'];
     for (const key of uiKeys) {
+      assert.ok(
+        isValidConfigKey(key),
+        key + ' is expected to remain central until the ui migration cutover',
+      );
       assert.ok(
         result.warnings.some((w) => w.includes(key)),
         'Should have a warning for ' + key + ', got: ' + JSON.stringify(result.warnings),
