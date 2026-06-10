@@ -9,6 +9,7 @@ allowed-tools:
   - Grep
   - Write
   - Agent
+requires: [gamedev-gate-check]
 ---
 <objective>
 Produce `.planning/knowledge/project-context.md` from the template:
