@@ -15,11 +15,14 @@ Documents de référence (dépôt d'analyse `comp`) :
 
 1. **Additif strict** : on ne modifie jamais un fichier appartenant à upstream.
    Tout vit dans des fichiers nouveaux : `capabilities/gamedev/`, `agents/ggd-*`,
-   `commands/ggd/`, `gsd-core/templates/ggd/`, `gsd-core/references/ggd/`,
-   `scripts/ggd/`, `tests/ggd-*`.
+   `commands/gsd/gamedev-*` (l'installeur ne projette que `commands/gsd/` — nos
+   commandes y vivent avec le préfixe `gamedev-`), `gsd-core/templates/ggd/`,
+   `gsd-core/references/ggd/`, `scripts/ggd/`, `tests/ggd-*`.
 2. **Exceptions allowlistées** (et rien d'autre) : rebranding (`package.json`,
-   `.claude-plugin/plugin.json`, `README.md`) et artefacts **générés** par
-   `npm run build` (`capability-registry.cjs`, `loop-host-contract.cjs`).
+   `.claude-plugin/plugin.json`, `README.md`) ; artefacts **générés** par
+   `npm run build` (`capability-registry.cjs`, `loop-host-contract.cjs`,
+   `docs/INVENTORY-MANIFEST.json`) ; et `docs/INVENTORY.md`, dont le process
+   upstream exige une ligne par agent/commande ajouté.
 3. **Vérification mécanique** : `scripts/ggd/check-additive.sh` échoue en CI
    (`.github/workflows/ggd.yml`) si la règle est violée.
 4. **Tout besoin hors-contrat part en PR upstream**, jamais en patch local.

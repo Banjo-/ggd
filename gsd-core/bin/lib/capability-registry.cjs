@@ -14,8 +14,15 @@ const capabilities = {
     "description": "Director-gate governance, GDD design contracts and engine knowledge packs for game projects (GGD - Get Games Done). Config keys (gamedev.review_mode, workflow.gdd_phase, workflow.director_gates, gamedev.autonomous_halt_on_reject) land at milestone 1, blocked on upstream PR: federated-config no-op test is over-constrained for a second capability with non-central keys.",
     "tier": "full",
     "requires": [],
-    "skills": [],
-    "agents": [],
+    "skills": [
+      "gamedev-gate-check"
+    ],
+    "agents": [
+      "ggd-creative-director",
+      "ggd-technical-director",
+      "ggd-producer",
+      "ggd-art-director"
+    ],
     "hooks": [],
     "config": {},
     "steps": [],
@@ -101,11 +108,16 @@ const capabilities = {
 };
 
 const bySkill = {
+  "gamedev-gate-check": "gamedev",
   "ui-phase": "ui",
   "ui-review": "ui"
 };
 
 const byAgent = {
+  "ggd-creative-director": "gamedev",
+  "ggd-technical-director": "gamedev",
+  "ggd-producer": "gamedev",
+  "ggd-art-director": "gamedev",
   "gsd-ui-checker": "ui",
   "gsd-ui-auditor": "ui"
 };
@@ -248,6 +260,9 @@ const runtimes = {};
 const commandFamilies = {};
 
 const capabilityClusters = {
+  "gamedev": [
+    "gamedev-gate-check"
+  ],
   "ui": [
     "ui-phase",
     "ui-review"
@@ -255,6 +270,12 @@ const capabilityClusters = {
 };
 
 const profileMembership = {
+  "gamedev": {
+    "tier": "full",
+    "profiles": [
+      "full"
+    ]
+  },
   "ui": {
     "tier": "full",
     "profiles": [

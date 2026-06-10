@@ -51,12 +51,16 @@ Full roster at `agents/gsd-*.md`. The "Primary doc" column flags whether [`docs/
 | gsd-intel-updater | Writes structured intel files (`.planning/intel/*.json`) used as a queryable codebase knowledge base. | `/gsd-map-codebase --query` | advanced stub |
 | gsd-doc-classifier | Classifies a single planning document as ADR, PRD, SPEC, DOC, or UNKNOWN; spawned in parallel to process the doc corpus. | `/gsd-ingest-docs` | advanced stub |
 | gsd-doc-synthesizer | Synthesizes classified planning docs into a single consolidated context with precedence rules, cycle detection, and three-bucket conflicts report. | `/gsd-ingest-docs` | advanced stub |
+| ggd-creative-director | GGD director judge for gate CD-PILLARS (pillars and creative vision, advisory first-line verdict). | `/gsd-gamedev-gate-check` | inventory only |
+| ggd-technical-director | GGD director judge for gate TD-ARCHITECTURE (engine-version safety, ownership, budgets). | `/gsd-gamedev-gate-check` | inventory only |
+| ggd-producer | GGD director judge for gate PR-SCOPE (scope realism, sequencing, shippability). | `/gsd-gamedev-gate-check` | inventory only |
+| ggd-art-director | GGD director judge for gate AD-COHERENCE (audiovisual identity coherence). | `/gsd-gamedev-gate-check` | inventory only |
 
 **Coverage note.** `docs/AGENTS.md` gives full role cards for 21 primary agents plus concise stubs for the 12 advanced agents. The Agent Tool Permissions Summary in that file covers only the primary 21 agents; the advanced agents' tool lists are captured in their per-agent frontmatter in `agents/gsd-*.md`.
 
 ---
 
-## Commands (67 shipped)
+## Commands (68 shipped)
 
 Full roster at `commands/gsd/*.md`. The groupings below mirror `docs/COMMANDS.md` section order; each row carries the command name, a one-line role derived from the command's frontmatter `description:`, and a link to the source file. `tests/command-count-sync.test.cjs` locks the count against the filesystem.
 
@@ -95,6 +99,7 @@ These six routers are descriptor-only entries that the model picks first; the bo
 | `/gsd-fast` | Execute a trivial task inline — no subagents, no planning overhead. | [commands/gsd/fast.md](../commands/gsd/fast.md) |
 | `/gsd-quick` | Execute a quick task with GSD guarantees (atomic commits, state tracking) but skip optional agents. | [commands/gsd/quick.md](../commands/gsd/quick.md) |
 | `/gsd-ui-review` | Retroactive 6-pillar visual audit of implemented frontend code. | [commands/gsd/ui-review.md](../commands/gsd/ui-review.md) |
+| `/gsd-gamedev-gate-check` | Run GGD director gates and record advisory verdicts in GATE-REPORT.md. | [commands/gsd/gamedev-gate-check.md](../commands/gsd/gamedev-gate-check.md) |
 | `/gsd-code-review` | Review source files changed during a phase for bugs, security, and code-quality problems; use `--fix` to auto-apply findings. | [commands/gsd/code-review.md](../commands/gsd/code-review.md) |
 | `/gsd-eval-review` | Retroactively audit an executed AI phase's evaluation coverage; produces EVAL-REVIEW.md. | [commands/gsd/eval-review.md](../commands/gsd/eval-review.md) |
 

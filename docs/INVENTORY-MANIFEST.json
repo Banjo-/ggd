@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-09",
+  "generated": "2026-06-10",
   "families": {
     "agents": [
       "gsd-advisor-researcher",
@@ -57,6 +57,7 @@
       "/gsd-extract-learnings",
       "/gsd-fast",
       "/gsd-forensics",
+      "/gsd-gamedev-gate-check",
       "/gsd-graphify",
       "/gsd-health",
       "/gsd-help",

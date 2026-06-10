@@ -25,6 +25,12 @@ ALLOWLIST=(
   ".claude-plugin/plugin.json"
   "gsd-core/bin/lib/capability-registry.cjs"
   "gsd-core/bin/lib/loop-host-contract.cjs"
+  # 3. Registres d'inventaire : le process upstream EXIGE une ligne par
+  #    agent/commande ajouté (cf. scripts/gen-inventory-manifest.cjs) —
+  #    modification sanctionnée par upstream lui-même. Conflit de merge →
+  #    régénérer le manifest (--write) et ré-appliquer nos lignes.
+  "docs/INVENTORY.md"
+  "docs/INVENTORY-MANIFEST.json"
 )
 
 if ! git rev-parse --verify --quiet "$UPSTREAM_REF" >/dev/null; then

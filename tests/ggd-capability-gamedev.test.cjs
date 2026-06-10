@@ -37,15 +37,21 @@ test('gamedev est enregistrée comme capability feature', () => {
   assert.deepEqual(cap.requires, []);
 });
 
-test('gamedev est config-only au squelette (steps/gates/skills/agents vides)', () => {
+test('gamedev au jalon 1 : skill gate-check + 4 juges, steps/gates non câblés', () => {
   const cap = registry.capabilities.gamedev;
-  // Invariant du squelette : le câblage steps/gates arrive avec les vraies
-  // skills (jalons 1-2). Si ce test casse parce qu'on ajoute un step, c'est
-  // normal : le mettre à jour en même temps que le manifeste.
+  // Le câblage steps/gates arrive avec la fédération de config (le `when:`
+  // des steps référencera les clés différées — voir NOTE en tête). Si ce test
+  // casse parce qu'on ajoute un step, c'est normal : le mettre à jour en même
+  // temps que le manifeste.
   assert.deepEqual(cap.steps, []);
   assert.deepEqual(cap.gates, []);
-  assert.deepEqual(cap.skills, []);
-  assert.deepEqual(cap.agents, []);
+  assert.deepEqual(cap.skills, ['gamedev-gate-check']);
+  assert.deepEqual([...cap.agents].sort(), [
+    'ggd-art-director',
+    'ggd-creative-director',
+    'ggd-producer',
+    'ggd-technical-director',
+  ]);
 });
 
 // ─── 2. Config différée (capteur de réactivation) ────────────────────────────
